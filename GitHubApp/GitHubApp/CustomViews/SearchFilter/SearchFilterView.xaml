@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="GitHubApp.CustomViews.SearchFilter.SearchFilterView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentView.Content>
+        <Grid
+            Padding="5"
+            ColumnDefinitions="*,*"
+            HeightRequest="80"
+            RowDefinitions="*,*">
+            <Frame
+                x:Name="IssuesFrame"
+                Grid.Row="0"
+                Grid.Column="0"
+                Padding="10,3"
+                CornerRadius="10"
+                HeightRequest="30">
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{Binding IssuesCount, StringFormat='Issues: {0}'}" />
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped_IssuesFrame" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Frame
+                x:Name="RepositoriesFrame"
+                Grid.Row="0"
+                Grid.Column="1"
+                Padding="10,3"
+                CornerRadius="10"
+                HeightRequest="30">
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{Binding RepositoriesCount, StringFormat='Repositories: {0}'}" />
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped_RepositoriesFrame" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Frame
+                x:Name="UsersFrame"
+                Grid.Row="1"
+                Grid.Column="0"
+                Padding="10,3"
+                CornerRadius="10"
+                HeightRequest="30">
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{Binding UsersCount, StringFormat='Users: {0}'}" />
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped_UsersFrame" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Frame
+                x:Name="CodeFrame"
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="10,3"
+                CornerRadius="10"
+                HeightRequest="30">
+                <Label
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{Binding CodeCount, StringFormat='Code: {0}'}" />
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped_CodeFrame" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

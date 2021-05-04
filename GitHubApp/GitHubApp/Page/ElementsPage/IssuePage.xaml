@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentPage
+    x:Class="GitHubApp.Page.ElementsPage.IssuePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:GitHubApp.Page.Base"
+    xmlns:model="clr-namespace:GitHubApp.Model"
+    xmlns:octokit="clr-namespace:Octokit;assembly=Octokit"
+    xmlns:pageModels="clr-namespace:GitHubApp.PageModel.ElementsPage"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="pageModels:IssuePageModel"
+    x:TypeArguments="pageModels:IssuePageModel">
+    <ContentView
+        ControlTemplate="{StaticResource BusyPage}">
+        <ScrollView
+            Padding="10">
+            <StackLayout>
+                <Label
+                    FontSize="Default"
+                    Style="{StaticResource TitleLabel}"
+                    Text="{Binding Issue.Title}"
+                    VerticalOptions="Center" />
+                <StackLayout
+                    HorizontalOptions="StartAndExpand">
+                    <StackLayout
+                        Orientation="Horizontal">
+                        <xct:AvatarView
+                            HeightRequest="50"
+                            Source="{Binding Issue.User.AvatarUrl}"
+                            Text="{Binding Issue.User.Login}"
+                            VerticalOptions="CenterAndExpand"
+                            WidthRequest="50" />
+                        <Label
+                            LineBreakMode="TailTruncation"
+                            MaxLines="1"
+                            Text="{Binding Issue.User.Login}"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+                    <Button
+                        ContentLayout="Left,0"
+                        Text="{Binding Issue.State.StringValue}">
+                        <Button.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Issue.State}"
+                                TargetType="Button"
+                                Value="{x:Static octokit:ItemState.Open}">
+                                <Setter Property="Image" Value="alert" />
+                                <Setter Property="BorderColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="IndianRed" />
+                                <Setter Property="TextColor" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding Issue.State}"
+                                TargetType="Button"
+                                Value="{x:Static octokit:ItemState.Closed}">
+                                <Setter Property="Image" Value="check" />
+                                <Setter Property="BorderColor" Value="Green" />
+                                <Setter Property="BackgroundColor" Value="LightGreen" />
+                                <Setter Property="TextColor" Value="Green" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Label
+                        FontSize="Micro"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Issue.CreatedAt, StringFormat='Opened at {0:dd MMM yyyy}'}"
+                        VerticalOptions="Center" />
+                    <Label
+                        FontSize="Micro"
+                        IsVisible="{Binding Issue.UpdatedAt, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Issue.UpdatedAt, StringFormat='Updated at {0:dd MMM yyyy}'}"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        FontSize="Micro"
+                        IsVisible="{Binding Issue.ClosedBy, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Issue.ClosedBy, StringFormat='Closed by {0}'}"
+                        VerticalOptions="Center" />
+                    <xct:Expander
+                        VerticalOptions="Start">
+                        <xct:Expander.Header>
+                            <StackLayout
+                                Margin="5"
+                                Orientation="Horizontal">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="Medium"
+                                    Text="Details" />
+                                <Image
+                                    HeightRequest="30"
+                                    HorizontalOptions="EndAndExpand"
+                                    Source="chevron_down"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Image.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                            TargetType="Image"
+                                            Value="True">
+                                            <Setter Property="Rotation" Value="180" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </StackLayout>
+                        </xct:Expander.Header>
+                        <StackLayout>
+                            <Label
+                                Text="Assignees"
+                                VerticalOptions="Center" />
+                            <ScrollView
+                                Orientation="Horizontal">
+                                <StackLayout
+                                    Margin="10,10,0,10"
+                                    BindableLayout.ItemsSource="{Binding Issue.Assignees}"
+                                    Orientation="Horizontal">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate
+                                            x:DataType="octokit:User">
+                                            <Label
+                                                Text="{Binding Login}" />
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                            </ScrollView>
+                            <Label
+                                Text="Labels"
+                                VerticalOptions="Center" />
+                            <ScrollView
+                                Orientation="Horizontal">
+                                <StackLayout
+                                    Margin="10,10,0,10"
+                                    BindableLayout.ItemsSource="{Binding Issue.Labels}"
+                                    Orientation="Horizontal">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate
+                                            x:DataType="octokit:Label">
+                                            <Button
+                                                BackgroundColor="{Binding Color}"
+                                                CornerRadius="10"
+                                                Text="{Binding Name}" />
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </StackLayout>
+                            </ScrollView>
+                        </StackLayout>
+
+
+
+
+                    </xct:Expander>
+                    <Frame
+                        Padding="5">
+                        <ScrollView
+                            Orientation="Horizontal">
+                            <Label
+                                BackgroundColor="{DynamicResource BorderFrame}"
+                                HorizontalOptions="CenterAndExpand"
+                                LineHeight="1.3"
+                                Style="{StaticResource ItalicLabel}"
+                                Text="{Binding Issue.Body}"
+                                VerticalOptions="Center" />
+                        </ScrollView>
+
+                    </Frame>
+                </StackLayout>
+                <StackLayout
+                    Margin="10,10,0,10"
+                    BindableLayout.ItemsSource="{Binding Comments}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="model:Comment">
+                            <Frame
+                                Margin="2"
+                                CornerRadius="10"
+                                HasShadow="True">
+                                <StackLayout>
+                                    <StackLayout
+                                        Orientation="Horizontal">
+                                        <xct:AvatarView
+                                            HeightRequest="50"
+                                            Source="{Binding User.AvatarUrl}"
+                                            Text="{Binding User.Login}"
+                                            VerticalOptions="CenterAndExpand"
+                                            WidthRequest="50" />
+                                        <Label
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Text="{Binding User.Login}"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+
+                                    <Frame
+                                        BackgroundColor="{DynamicResource BorderFrame}">
+                                        <Label
+                                            HorizontalOptions="CenterAndExpand"
+                                            Style="{StaticResource ItalicLabel}"
+                                            Text="{Binding Body}"
+                                            VerticalOptions="Center" />
+                                    </Frame>
+                                    <StackLayout
+                                        Spacing="0">
+                                        <Label
+                                            FontSize="Micro"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding CreatedAt, StringFormat='Created at {0:dd MMM yyyy}'}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            FontSize="Micro"
+                                            IsVisible="{Binding UpdatedAt, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                            Text="{Binding UpdatedAt, StringFormat='Updated at {0:dd MMM yyyy}'}"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </StackLayout>
+
+        </ScrollView>
+
+    </ContentView>
+</base:BaseContentPage>

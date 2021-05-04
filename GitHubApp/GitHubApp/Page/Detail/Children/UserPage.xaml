@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentPage
+    x:Class="GitHubApp.Page.Detail.Children.UserPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:GitHubApp.Page.Base"
+    xmlns:customentry="clr-namespace:GitHubApp.CustomViews.CustomEntry"
+    xmlns:octokit="clr-namespace:Octokit;assembly=Octokit"
+    xmlns:pageModels="clr-namespace:GitHubApp.PageModel.Detail.Children"
+    xmlns:usercontainer="clr-namespace:GitHubApp.CustomViews.UserContainer"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="pageModels:UserPageModel"
+    x:TypeArguments="pageModels:UserPageModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:IsNotNullOrEmptyConverter
+                x:Key="IsNotNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentView>
+        <Grid
+            Padding="10"
+            xct:StateLayout.CurrentState="{Binding CurrentState}">
+            <xct:StateLayout.StateViews>
+                <xct:StateView
+                    StateKey="Empty">
+                    <Grid
+                        Margin="20,0"
+                        RowDefinitions="*,3*,*"
+                        RowSpacing="20"
+                        VerticalOptions="CenterAndExpand">
+                        <StackLayout
+                            Grid.Row="1">
+                            <customentry:BaseCustomEntry
+                                Title="Token"
+                                IsMandatory="True"
+                                IsNotValid="{Binding TokenEntryNotValid}"
+                                Placeholder="Type your token"
+                                SelectedKeyboard="Email"
+                                Text="{Binding Token}"
+                                ValidityPlaceholder="Token cannot be empty" />
+                            <StackLayout
+                                HorizontalOptions="EndAndExpand"
+                                Orientation="Horizontal">
+                                <Label
+                                    Text="Remember me"
+                                    VerticalOptions="CenterAndExpand" />
+                                <CheckBox
+                                    IsChecked="{Binding RememberMe}"
+                                    Color="{DynamicResource AccentSecondary}" />
+                            </StackLayout>
+
+
+                            <Button
+                                Command="{Binding LoginCommand}"
+                                Style="{StaticResource PrimaryButton}"
+                                Text="Log in" />
+                            <Button
+                                BackgroundColor="Transparent"
+                                BorderColor="Transparent"
+                                Command="{Binding GenerateToken}"
+                                Text="Obtain Token"
+                                TextTransform="Lowercase" />
+                        </StackLayout>
+
+                    </Grid>
+                </xct:StateView>
+                <xct:StateView
+                    StateKey="Success">
+                    <ScrollView>
+                        <usercontainer:UserView
+                            Contributions="{Binding Contributions}"
+                            NavigateToRepositoryCommand="{Binding NavigateToRepositoryCommand}"
+                            User="{Binding User}"
+                            UserRepositories="{Binding UserRepositories}" />
+                    </ScrollView>
+                </xct:StateView>
+                <xct:StateView
+                    HorizontalOptions="CenterAndExpand"
+                    StateKey="Loading"
+                    VerticalOptions="CenterAndExpand">
+                    <StackLayout>
+                        <ActivityIndicator
+                            IsRunning="True"
+                            Color="{DynamicResource Accent}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Loading..." />
+                    </StackLayout>
+                </xct:StateView>
+            </xct:StateLayout.StateViews>
+        </Grid>
+    </ContentView>
+</base:BaseContentPage>

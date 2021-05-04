@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:BasePopupPage
+    x:Class="GitHubApp.Popups.PromptPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    xmlns:popup="clr-namespace:GitHubApp.Popups">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+    <StackLayout
+        Padding="20"
+        BackgroundColor="{DynamicResource PrimaryLight}">
+        <StackLayout
+            Margin="20,0"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+            <Label
+                x:Name="TopTextLabel"
+                FontSize="16"
+                HorizontalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                LineHeight="1.25"
+                Style="{DynamicResource CanalBold}" />
+            <Image
+                x:Name="IconImage"
+                Margin="0,40"
+                HeightRequest="55"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="55" />
+            <Label
+                x:Name="BottomTextLabel"
+                FontSize="16"
+                HorizontalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                LineHeight="1.25"
+                Style="{DynamicResource SansSemiBold}" />
+        </StackLayout>
+        <StackLayout
+            Margin="0,20"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="End">
+            <Button
+                x:Name="PopupButton"
+                Margin="0,0,0,20"
+                Clicked="PopupButton_Clicked"
+                Style="{DynamicResource PrimaryButton}" />
+            <Label
+                x:Name="CallbackBottomLabel"
+                FontSize="14"
+                HorizontalOptions="CenterAndExpand"
+                Style="{DynamicResource CanalDemiBold}"
+                TextDecorations="Underline"
+                TextTransform="Uppercase" />
+        </StackLayout>
+    </StackLayout>
+</popup:BasePopupPage>

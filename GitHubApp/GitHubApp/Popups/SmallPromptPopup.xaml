@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:BasePopupPage
+    x:Class="GitHubApp.Popups.SmallPromptPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    xmlns:popup="clr-namespace:GitHubApp.Popups">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+    <StackLayout
+        Margin="20,0"
+        BackgroundColor="{DynamicResource PrimaryLight}"
+        HorizontalOptions="FillAndExpand"
+        Spacing="0"
+        VerticalOptions="CenterAndExpand">
+        <ImageButton
+            Margin="15,10,15,5"
+            BackgroundColor="Transparent"
+            Clicked="ImageButton_Clicked"
+            HorizontalOptions="EndAndExpand"
+            Source="close"
+            VerticalOptions="Start" />
+        <StackLayout
+            Margin="0,20,0,20"
+            Padding="20,0,20,20"
+            Spacing="20">
+            <Label
+                x:Name="TopTextLabel"
+                FontSize="14"
+                HorizontalTextAlignment="Start" />
+            <Label
+                x:Name="TextLabel"
+                FontSize="12"
+                HorizontalTextAlignment="Start" />
+        </StackLayout>
+    </StackLayout>
+</popup:BasePopupPage>

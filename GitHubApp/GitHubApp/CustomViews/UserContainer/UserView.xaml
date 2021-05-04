@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="GitHubApp.CustomViews.UserContainer.UserView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contribution="clr-namespace:GitHubApp.CustomViews.Contribution"
+    xmlns:octokit="clr-namespace:Octokit;assembly=Octokit"
+    xmlns:usercontainer="clr-namespace:GitHubApp.CustomViews.UserContainer"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="usercontainer:UserView">
+    <ContentView.Content>
+        <StackLayout
+            x:Name="UserViewStack"
+            Margin="10">
+            <xct:AvatarView
+                HeightRequest="50"
+                HorizontalOptions="CenterAndExpand"
+                Source="{Binding User.AvatarUrl}"
+                Text="{Binding User.Login}"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="50" />
+            <Label
+                Grid.Column="0"
+                HorizontalOptions="CenterAndExpand"
+                LineBreakMode="TailTruncation"
+                MaxLines="1"
+                Text="{Binding User.Login}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                IsVisible="{Binding User.Name, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                LineBreakMode="TailTruncation"
+                Text="{Binding User.Name}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                IsVisible="{Binding User.Location, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                LineBreakMode="TailTruncation"
+                Text="{Binding User.Location}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                LineBreakMode="TailTruncation"
+                Text="{Binding User.CreatedAt, StringFormat='User since: {0:dd MMM yyyy}'}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                IsVisible="{Binding User.Bio, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                LineBreakMode="TailTruncation"
+                Text="{Binding User.Bio, StringFormat='Bio: {0}'}"
+                VerticalOptions="Center" />
+            <xct:Expander
+                VerticalOptions="Start">
+                <xct:Expander.Header>
+                    <StackLayout
+                        Orientation="Horizontal">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            Text="Repositories" />
+                        <Image
+                            HeightRequest="30"
+                            HorizontalOptions="EndAndExpand"
+                            Source="chevron_down"
+                            VerticalOptions="CenterAndExpand">
+                            <Image.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                    TargetType="Image"
+                                    Value="True">
+                                    <Setter Property="Rotation" Value="180" />
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+                    </StackLayout>
+                </xct:Expander.Header>
+                <StackLayout
+                    Margin="0,10"
+                    BindableLayout.ItemsSource="{Binding UserRepositories}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="octokit:Repository">
+                            <Frame
+                                Margin="2"
+                                CornerRadius="10"
+                                HasShadow="True">
+                                <StackLayout>
+                                    <StackLayout
+                                        Orientation="Horizontal">
+                                        <Label
+                                            FontSize="Medium"
+                                            HorizontalOptions="Start"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Text="{Binding FullName}"
+                                            VerticalOptions="Center" />
+                                        <Frame
+                                            Padding="10,5"
+                                            BorderColor="{DynamicResource BorderFrame}"
+                                            CornerRadius="20"
+                                            HasShadow="False"
+                                            HorizontalOptions="EndAndExpand"
+                                            IsVisible="{Binding Private}"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                FontSize="Micro"
+                                                Text="Private" />
+                                        </Frame>
+                                    </StackLayout>
+                                    <Label
+                                        FontSize="Small"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding UpdatedAt, StringFormat='Updated on {0:dd MMMM yyyy}'}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontSize="Small"
+                                        HorizontalOptions="Start"
+                                        IsVisible="{Binding Description, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                                        MaxLines="3"
+                                        Text="{Binding Description}"
+                                        VerticalOptions="Center" />
+                                    <StackLayout
+                                        HeightRequest="20"
+                                        Orientation="Horizontal">
+                                        <Image
+                                            Source="code_braces" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Margin="0,0,10,0"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding Language}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Source="star_outline" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Margin="0,0,10,0"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding StargazersCount}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Source="source_fork" />
+                                        <Label
+                                            Grid.Column="1"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding ForksCount}"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+
+                                </StackLayout>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Path=BindingContext.NavigateToRepositoryCommand, Source={x:Reference UserViewStack}}"
+                                        CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+
+            </xct:Expander>
+            <xct:Expander
+                VerticalOptions="Start">
+                <xct:Expander.Header>
+                    <StackLayout
+                        Orientation="Horizontal">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            Text="Contributions" />
+                        <Image
+                            HeightRequest="30"
+                            HorizontalOptions="EndAndExpand"
+                            Source="chevron_down"
+                            VerticalOptions="CenterAndExpand">
+                            <Image.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                    TargetType="Image"
+                                    Value="True">
+                                    <Setter Property="Rotation" Value="180" />
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+                    </StackLayout>
+                </xct:Expander.Header>
+                <StackLayout
+                    Margin="0,10">
+                    <contribution:ContributionView
+                        Contributions="{Binding Contributions}"
+                        HeightRequest="180"
+                        MinimumHeightRequest="180" />
+                </StackLayout>
+            </xct:Expander>
+            <StackLayout
+                IsVisible="{Binding User.HtmlUrl, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                Orientation="Horizontal">
+                <Label
+                    FontSize="Small"
+                    Text="Github site" />
+                <Image
+                    HeightRequest="30"
+                    HorizontalOptions="EndAndExpand"
+                    Rotation="-90"
+                    Source="chevron_down"
+                    VerticalOptions="CenterAndExpand" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

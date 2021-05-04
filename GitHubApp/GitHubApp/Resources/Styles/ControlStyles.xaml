@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="GitHubApp.Resources.Styles.ControlStyles"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:model="clr-namespace:GitHubApp.Model"
+    xmlns:templateselecotr="clr-namespace:GitHubApp.Utils.TemplateSelecotr">
+
+    <Style
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style x:Key="TitleLabel"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="proxima_bold" />
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style x:Key="ItalicLabel"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="proxima_italic" />
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="Button">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="Entry">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="Picker">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="DatePicker">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="TimePicker">
+        <Setter Property="FontFamily" Value="proxima" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{DynamicResource FontPrimary}" />
+    </Style>
+    <Style
+        TargetType="ProgressBar">
+        <Setter Property="ProgressColor" Value="{DynamicResource FontPrimary}" />
+    </Style>
+
+    <Style
+        TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{DynamicResource PrimaryDark}" />
+        <Setter Property="BarTextColor" Value="{DynamicResource FontInverted}" />
+    </Style>
+
+    <OnPlatform
+        x:Key="ButtonCornerRadius"
+        x:TypeArguments="x:Int32"
+        Android="24"
+        iOS="21" />
+
+    <Style
+        x:Key="PrimaryButton"
+        TargetType="Button">
+        <Setter Property="CornerRadius" Value="{StaticResource ButtonCornerRadius}" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="CharacterSpacing" Value="0" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="FontFamily" Value="canal_bold" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+        <Setter Property="TextColor" Value="{DynamicResource FontInverted}" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+    </Style>
+    <Style
+        x:Key="CollectionViewSelector"
+        TargetType="StackLayout">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup
+                    x:Name="CommonStates">
+                    <VisualState
+                        x:Name="Normal" />
+                    <VisualState
+                        x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="LightSkyBlue" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <behaviors:IsNotNullOrEmptyConverter
+        x:Key="IsNotNullOrEmptyConverter" />
+    <ControlTemplate
+        x:Key="BusyPage">
+        <AbsoluteLayout>
+            <Grid
+                Padding="0"
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                RowDefinitions="*">
+                <ContentPresenter
+                    Grid.Row="0" />
+            </Grid>
+            <Grid
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="{DynamicResource BusyPageBackgroundColor}"
+                IsVisible="{TemplateBinding BindingContext.Busy}">
+                <ActivityIndicator
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    AutomationId="IdActivityIndicator"
+                    HorizontalOptions="Center"
+                    IsRunning="{TemplateBinding BindingContext.Busy}"
+                    IsVisible="{TemplateBinding BindingContext.Busy}"
+                    VerticalOptions="Center"
+                    Color="{DynamicResource Accent}" />
+            </Grid>
+        </AbsoluteLayout>
+    </ControlTemplate>
+    <DataTemplate
+        x:Key="UserTemplate"
+        x:DataType="model:SearchResultContainer">
+        <StackLayout
+            BackgroundColor="White"
+            Spacing="0">
+            <BoxView
+                BackgroundColor="{DynamicResource BorderFrame}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <StackLayout
+                Margin="10,3"
+                Orientation="Horizontal"
+                Spacing="5">
+                <behaviors:AvatarView
+                    HeightRequest="30"
+                    Source="{Binding Image}"
+                    WidthRequest="30" />
+                <Label
+                    Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+
+        </StackLayout>
+
+    </DataTemplate>
+    <DataTemplate
+        x:Key="RepositoryTemplate"
+        x:DataType="model:SearchResultContainer">
+        <Frame
+            Margin="20,0"
+            Padding="5"
+            CornerRadius="10"
+            HasShadow="True">
+            <StackLayout
+                BackgroundColor="White">
+
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Image
+                        HeightRequest="30"
+                        Source="{Binding Image}" />
+                    <Label
+                        Text="{Binding Title}"
+                        VerticalOptions="CenterAndExpand" />
+                </StackLayout>
+                <Label
+                    FontSize="Small"
+                    HorizontalOptions="Start"
+                    Text="{Binding DateText, StringFormat='Updated on {0:dd MMMM yyyy}'}"
+                    VerticalOptions="Center" />
+                <Label
+                    FontSize="Small"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding Discription, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    MaxLines="3"
+                    Text="{Binding Discription}"
+                    VerticalOptions="Center" />
+                <StackLayout
+                    HeightRequest="20"
+                    Orientation="Horizontal">
+                    <Image
+                        IsVisible="{Binding CodeType, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        Source="code_braces" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        HorizontalOptions="Start"
+                        IsVisible="{Binding CodeType, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                        Text="{Binding CodeType}"
+                        VerticalOptions="Center" />
+                    <Image
+                        Source="star_outline" />
+                    <Label
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        HorizontalOptions="Start"
+                        Text="{Binding StargazersCount}"
+                        VerticalOptions="Center" />
+
+                </StackLayout>
+
+            </StackLayout>
+        </Frame>
+    </DataTemplate>
+    <DataTemplate
+        x:Key="CodeTemplate"
+        x:DataType="model:SearchResultContainer">
+        <StackLayout
+            BackgroundColor="White">
+            <BoxView
+                BackgroundColor="{DynamicResource BorderFrame}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <StackLayout
+                Margin="10,0"
+                Orientation="Horizontal">
+                <Image
+                    HeightRequest="30"
+                    Source="{Binding Image}" />
+                <Label
+                    Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+            <Label
+                Margin="10,0"
+                FontSize="Micro"
+                Text="{Binding Discription}" />
+
+            <Label
+                Margin="10,0"
+                FontSize="Micro"
+                HorizontalOptions="Start"
+                IsVisible="{Binding MoreInfo, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                Text="{Binding MoreInfo}"
+                TextColor="{DynamicResource FontSecondary}"
+                VerticalOptions="Center" />
+
+        </StackLayout>
+    </DataTemplate>
+    <DataTemplate
+        x:Key="IssueTemplate"
+        x:DataType="model:SearchResultContainer">
+        <StackLayout
+            BackgroundColor="White"
+            Spacing="2">
+            <BoxView
+                BackgroundColor="{DynamicResource BorderFrame}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <StackLayout
+                Orientation="Horizontal">
+                <Image
+                    HeightRequest="20"
+                    Source="{Binding Image}" />
+                <Label
+                    FontSize="Micro"
+                    Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+
+            <StackLayout
+                Margin="10,0">
+                <Label
+                    Text="{Binding Discription}"
+                    TextColor="{DynamicResource AccentSecondary}" />
+                <Label
+                    FontSize="Micro"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding MoreInfo, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    Text="{Binding MoreInfo}"
+                    TextColor="{DynamicResource FontSecondary}"
+                    VerticalOptions="Center" />
+                <Label
+                    FontSize="Micro"
+                    HorizontalOptions="Start"
+                    Text="{Binding DateText}"
+                    VerticalOptions="Center" />
+
+            </StackLayout>
+
+
+        </StackLayout>
+    </DataTemplate>
+    <templateselecotr:SearchTemplateSelecotr
+        x:Key="SearchItemTemplate"
+        CodeTemplate="{StaticResource CodeTemplate}"
+        IssueTemplate="{StaticResource IssueTemplate}"
+        RepositoryTemplate="{StaticResource RepositoryTemplate}"
+        UserTemplate="{StaticResource UserTemplate}" />
+</ResourceDictionary>

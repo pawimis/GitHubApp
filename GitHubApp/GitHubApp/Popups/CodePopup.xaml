@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:BasePopupPage
+    x:Class="GitHubApp.Popups.CodePopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    xmlns:popup="clr-namespace:GitHubApp.Popups">
+    <pages:PopupPage.Animation>
+        <pages:ScaleAnimation
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+    <StackLayout
+        Margin="20"
+        BackgroundColor="{DynamicResource PrimaryLight}"
+        HorizontalOptions="FillAndExpand"
+        Spacing="0"
+        VerticalOptions="FillAndExpand">
+        <ImageButton
+            Margin="15,10,15,5"
+            BackgroundColor="Transparent"
+            Clicked="ImageButton_Clicked"
+            HorizontalOptions="EndAndExpand"
+            Source="close"
+            VerticalOptions="Start" />
+        <BoxView
+            BackgroundColor="{DynamicResource BorderFrame}"
+            HeightRequest="1"
+            HorizontalOptions="FillAndExpand" />
+        <ScrollView
+            Orientation="Both">
+            <Label
+                x:Name="codeLabel"
+                Margin="10"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand" />
+        </ScrollView>
+
+    </StackLayout>
+</popup:BasePopupPage>

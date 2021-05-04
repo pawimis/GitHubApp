@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentPage
+    x:Class="GitHubApp.Page.ElementsPage.GithubUserPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:GitHubApp.Page.Base"
+    xmlns:pageModels="clr-namespace:GitHubApp.PageModel.ElementsPage"
+    xmlns:usercontainer="clr-namespace:GitHubApp.CustomViews.UserContainer"
+    x:DataType="pageModels:GithubUserPageModel"
+    x:TypeArguments="pageModels:GithubUserPageModel">
+    <ContentView
+        ControlTemplate="{StaticResource BusyPage}">
+        <ScrollView>
+            <StackLayout>
+
+                <usercontainer:UserView
+                    Contributions="{Binding Contributions}"
+                    NavigateToRepositoryCommand="{Binding NavigateToRepositoryCommand}"
+                    User="{Binding User}"
+                    UserRepositories="{Binding UserRepositories}" />
+            </StackLayout>
+        </ScrollView>
+
+    </ContentView>
+</base:BaseContentPage>

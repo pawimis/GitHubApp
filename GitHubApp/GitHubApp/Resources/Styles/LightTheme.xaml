@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    x:Class="GitHubApp.Resources.Styles.LightTheme"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!--#region  BackgroundColors-->
+
+    <Color
+        x:Key="PrimaryLight">
+        #FFFFFF
+    </Color>
+
+    <Color
+        x:Key="SecondaryLight">
+        #E7E7E8
+    </Color>
+
+    <Color
+        x:Key="PrimaryDark">
+        #000000
+    </Color>
+
+    <!--#endregion-->
+
+    <!--#region  Fonts-->
+
+    <Color
+        x:Key="FontPrimary">
+        #000000
+    </Color>
+
+    <Color
+        x:Key="FontSecondary">
+        #767676
+    </Color>
+
+    <Color
+        x:Key="FontAccentPrimary">
+        #F44063
+    </Color>
+
+    <Color
+        x:Key="FontAccentSecondary">
+        #00C5C2
+    </Color>
+
+    <Color
+        x:Key="FontInverted">
+        #FFFFFF
+    </Color>
+    <Color
+        x:Key="BusyPageBackgroundColor">
+        #fff
+    </Color>
+    <!--#endregion-->
+</ResourceDictionary>

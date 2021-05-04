@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="GitHubApp.CustomViews.CustomEntry.BaseCustomEntry"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:borderless="clr-namespace:GitHubApp.CustomViews.CustomEntry">
+    <ContentView.Content>
+        <Grid
+            x:Name="MainGrid"
+            RowDefinitions="auto,45,auto"
+            RowSpacing="3">
+            <StackLayout
+                Grid.Row="0"
+                Margin="3,0"
+                Orientation="Horizontal">
+                <Label
+                    FontSize="Small"
+                    Text="{Binding Title}"
+                    VerticalOptions="Start" />
+                <Label
+                    FontSize="Small"
+                    IsVisible="{Binding IsMandatory}"
+                    Text="*"
+                    TextColor="{DynamicResource Accent}"
+                    VerticalOptions="StartAndExpand" />
+            </StackLayout>
+            <BoxView
+                Grid.Row="1"
+                BackgroundColor="{Binding FrameColor}"
+                CornerRadius="0"
+                HeightRequest="40"
+                MinimumHeightRequest="40">
+                <BoxView.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsNotValid}"
+                        TargetType="BoxView"
+                        Value="True">
+                        <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                    </DataTrigger>
+                </BoxView.Triggers>
+            </BoxView>
+            <BoxView
+                Grid.Row="1"
+                Margin="1"
+                BackgroundColor="{DynamicResource PrimaryLight}"
+                CornerRadius="0"
+                HeightRequest="40"
+                MinimumHeightRequest="40" />
+            <borderless:BorderlessEntry
+                Grid.Row="1"
+                Margin="5,1,1,1"
+                BackgroundColor="{DynamicResource PrimaryLight}"
+                HeightRequest="40"
+                IsPassword="{Binding IsEntryAPassword}"
+                Keyboard="{Binding SelectedKeyboard}"
+                MaxLength="{Binding MaxEntryLength}"
+                MinimumHeightRequest="40"
+                Placeholder="{Binding Placeholder}"
+                PlaceholderColor="{DynamicResource FontSecondary}"
+                Text="{Binding Text}"
+                TextColor="{DynamicResource FontPrimary}"
+                VerticalOptions="FillAndExpand"
+                VerticalTextAlignment="Center">
+                <borderless:BorderlessEntry.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsNotValid}"
+                        TargetType="borderless:BorderlessEntry"
+                        Value="True">
+                        <Setter Property="PlaceholderColor" Value="{DynamicResource Accent}" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding IsEntryAPassword}"
+                        TargetType="borderless:BorderlessEntry"
+                        Value="true">
+                        <Setter Property="CharacterSpacing" Value="-4" />
+                    </DataTrigger>
+                </borderless:BorderlessEntry.Triggers>
+            </borderless:BorderlessEntry>
+            <ImageButton
+                Grid.Row="1"
+                Margin="10,0"
+                BackgroundColor="Transparent"
+                Clicked="ShowHidePassword"
+                HeightRequest="25"
+                HorizontalOptions="End"
+                IsVisible="{Binding IsPassword}"
+                Source="show"
+                WidthRequest="25" />
+            <Grid
+                Grid.Row="2"
+                Margin="3,0">
+                <Label
+                    FontSize="Small"
+                    IsVisible="{Binding IsNotValid}"
+                    Text="{Binding ValidityPlaceholder}"
+                    TextColor="{DynamicResource Accent}" />
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>
