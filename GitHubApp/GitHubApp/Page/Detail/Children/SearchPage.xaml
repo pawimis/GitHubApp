@@ -8,7 +8,6 @@
     xmlns:customviews="clr-namespace:GitHubApp.CustomViews"
   xmlns:enums="clr-namespace:GitHubApp.Model.Enums"
     xmlns:pageModels="clr-namespace:GitHubApp.PageModel.Detail.Children"
-    xmlns:searchfilter="clr-namespace:GitHubApp.CustomViews.SearchFilter"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit" BackgroundColor="Black"
     x:DataType="pageModels:SearchPageModel"
     x:TypeArguments="pageModels:SearchPageModel">
@@ -84,11 +83,32 @@
             <Grid RowDefinitions="*"  ColumnDefinitions="*" 
                 >
                 <StackLayout Grid.Column="0" Grid.Row="0">
-                    <StackLayout HeightRequest="100"   MinimumHeightRequest="100"  IsVisible="{Binding HasSearchResults}">
-                        <Label Margin="10"
+                    <xct:Expander
+                        VerticalOptions="Start">
+                        <xct:Expander.Header>
+                            <StackLayout
+                                Margin="5"
+                                Orientation="Horizontal">
+                                <Label Margin="10"
                                             FontAttributes="Bold"
                                             FontSize="Medium" VerticalOptions="CenterAndExpand"
                                             Text="{Binding SearchText, StringFormat='Search results for: {0}'}" />
+                                <Image
+                                    HeightRequest="30"
+                                    HorizontalOptions="EndAndExpand"
+                                    Source="chevron_down"
+                                    VerticalOptions="CenterAndExpand">
+                                    <Image.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
+                                            TargetType="Image"
+                                            Value="True">
+                                            <Setter Property="Rotation" Value="180" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </StackLayout>
+                        </xct:Expander.Header>
                         <Grid
             Padding="5"
             ColumnDefinitions="*,*"
@@ -152,6 +172,10 @@
                             </Frame>
 
                         </Grid>
+                    </xct:Expander>
+                    <StackLayout HeightRequest="100"   MinimumHeightRequest="100"  IsVisible="{Binding HasSearchResults}">
+
+
                     </StackLayout>
                     <CollectionView
                                 ItemsUpdatingScrollMode="KeepScrollOffset"
