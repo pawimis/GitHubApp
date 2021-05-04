@@ -60,7 +60,7 @@
                         Orientation="Horizontal">
                         <Label
                             FontAttributes="Bold"
-                            FontSize="Medium"
+                            FontSize="Medium" VerticalOptions="CenterAndExpand"
                             Text="Repositories" />
                         <Image
                             HeightRequest="30"
@@ -87,7 +87,7 @@
                             <Frame
                                 Margin="2"
                                 CornerRadius="10"
-                                HasShadow="True">
+                                HasShadow="False">
                                 <StackLayout>
                                     <StackLayout
                                         Orientation="Horizontal">
@@ -101,7 +101,6 @@
                                         <Frame
                                             Padding="10,5"
                                             BorderColor="{DynamicResource BorderFrame}"
-                                            CornerRadius="20"
                                             HasShadow="False"
                                             HorizontalOptions="EndAndExpand"
                                             IsVisible="{Binding Private}"
@@ -109,6 +108,16 @@
                                             <Label
                                                 FontSize="Micro"
                                                 Text="Private" />
+                                            <Frame.CornerRadius>
+                                                <OnPlatform x:TypeArguments="x:Single">
+                                                    <On Value="10" Platform="iOS">
+
+                                                    </On>
+                                                    <On Value="20" Platform="Android">
+
+                                                    </On>
+                                                </OnPlatform>
+                                            </Frame.CornerRadius>
                                         </Frame>
                                     </StackLayout>
                                     <Label
@@ -170,7 +179,7 @@
                         Orientation="Horizontal">
                         <Label
                             FontAttributes="Bold"
-                            FontSize="Medium"
+                            FontSize="Medium" VerticalOptions="CenterAndExpand"
                             Text="Contributions" />
                         <Image
                             HeightRequest="30"

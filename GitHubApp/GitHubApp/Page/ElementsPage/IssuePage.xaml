@@ -33,33 +33,34 @@
                         <Label
                             LineBreakMode="TailTruncation"
                             MaxLines="1"
+                            HorizontalOptions="StartAndExpand"
                             Text="{Binding Issue.User.Login}"
                             VerticalOptions="Center" />
-                    </StackLayout>
-                    <Button
-                        ContentLayout="Left,0"
+                        <Button
+                        ContentLayout="Left,0" CornerRadius="10" Padding="5,3,20,3"
+                        HorizontalOptions="End" TextColor="White"
                         Text="{Binding Issue.State.StringValue}">
-                        <Button.Triggers>
-                            <DataTrigger
+                            <Button.Triggers>
+                                <DataTrigger
                                 Binding="{Binding Issue.State}"
                                 TargetType="Button"
                                 Value="{x:Static octokit:ItemState.Open}">
-                                <Setter Property="Image" Value="alert" />
-                                <Setter Property="BorderColor" Value="Red" />
-                                <Setter Property="BackgroundColor" Value="IndianRed" />
-                                <Setter Property="TextColor" Value="Red" />
-                            </DataTrigger>
-                            <DataTrigger
+                                    <Setter Property="Image" Value="alert" />
+                                    <Setter Property="BorderColor" Value="Red" />
+                                    <Setter Property="BackgroundColor" Value="IndianRed" />
+                                </DataTrigger>
+                                <DataTrigger
                                 Binding="{Binding Issue.State}"
                                 TargetType="Button"
                                 Value="{x:Static octokit:ItemState.Closed}">
-                                <Setter Property="Image" Value="check" />
-                                <Setter Property="BorderColor" Value="Green" />
-                                <Setter Property="BackgroundColor" Value="LightGreen" />
-                                <Setter Property="TextColor" Value="Green" />
-                            </DataTrigger>
-                        </Button.Triggers>
-                    </Button>
+                                    <Setter Property="Image" Value="check" />
+                                    <Setter Property="BorderColor" Value="Green" />
+                                    <Setter Property="BackgroundColor" Value="LightGreen" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </StackLayout>
+
                     <Label
                         FontSize="Micro"
                         LineBreakMode="TailTruncation"
@@ -86,7 +87,7 @@
                                 Orientation="Horizontal">
                                 <Label
                                     FontAttributes="Bold"
-                                    FontSize="Medium"
+                                    FontSize="Medium" VerticalOptions="CenterAndExpand"
                                     Text="Details" />
                                 <Image
                                     HeightRequest="30"
@@ -149,21 +150,27 @@
 
 
                     </xct:Expander>
-                    <Frame
-                        Padding="5">
-                        <ScrollView
-                            Orientation="Horizontal">
+                    <ScrollView Orientation="Horizontal"                                 >
+
+                        <Frame
+                        Padding="10,5" >
+
                             <Label
-                                BackgroundColor="{DynamicResource BorderFrame}"
                                 HorizontalOptions="CenterAndExpand"
                                 LineHeight="1.3"
                                 Style="{StaticResource ItalicLabel}"
                                 Text="{Binding Issue.Body}"
                                 VerticalOptions="Center" />
-                        </ScrollView>
 
-                    </Frame>
+                        </Frame>
+                    </ScrollView>
+
                 </StackLayout>
+                 <Label
+                                HorizontalOptions="StartAndExpand"
+                                Style="{StaticResource TitleLabel}"
+                                Text="Comments"
+                                VerticalOptions="Center" />
                 <StackLayout
                     Margin="10,10,0,10"
                     BindableLayout.ItemsSource="{Binding Comments}">
@@ -173,7 +180,7 @@
                             <Frame
                                 Margin="2"
                                 CornerRadius="10"
-                                HasShadow="True">
+                                HasShadow="False">
                                 <StackLayout>
                                     <StackLayout
                                         Orientation="Horizontal">
@@ -190,14 +197,20 @@
                                             VerticalOptions="Center" />
                                     </StackLayout>
 
-                                    <Frame
-                                        BackgroundColor="{DynamicResource BorderFrame}">
-                                        <Label
-                                            HorizontalOptions="CenterAndExpand"
-                                            Style="{StaticResource ItalicLabel}"
-                                            Text="{Binding Body}"
-                                            VerticalOptions="Center" />
-                                    </Frame>
+                                    <ScrollView Orientation="Horizontal"                                 >
+
+                                        <Frame
+                        Padding="10,5" >
+
+                                            <Label
+                                HorizontalOptions="CenterAndExpand"
+                                LineHeight="1.3"
+                                Style="{StaticResource ItalicLabel}"
+                                Text="{Binding Body}"
+                                VerticalOptions="Center" />
+
+                                        </Frame>
+                                    </ScrollView>
                                     <StackLayout
                                         Spacing="0">
                                         <Label

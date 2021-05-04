@@ -1,7 +1,7 @@
 ﻿
 using GitHubApp.Interface;
 using GitHubApp.Service;
-
+using GitHubApp.Utils.BusyManager;
 using MvvmCross;
 using MvvmCross.Forms.Platforms.Ios.Core;
 using MvvmCross.Forms.Presenters;
@@ -35,8 +35,12 @@ namespace GitHubApp.iOS
         protected override IMvxIoCProvider InitializeIoC()
         {
             IMvxIoCProvider ioc = base.InitializeIoC();
-            ioc.RegisterSingleton<IGitHubClient>(new GitHubClient(new ProductHeaderValue("test")));
+            ioc.RegisterSingleton<IGitHubClient>(new GitHubClient(new ProductHeaderValue("RecrutationApp")));
+            ioc.LazyConstructAndRegisterSingleton<IBusyManager, BusyManager>();
+            ioc.LazyConstructAndRegisterSingleton<IGithubService, GithubWebService>();
             ioc.LazyConstructAndRegisterSingleton<IPopupNavigationService, PopupNavigationService>();
+            ioc.LazyConstructAndRegisterSingleton<ISecureStorageService, SecureStorageService>();
+            ioc.LazyConstructAndRegisterSingleton<ICacheService, CacheService>();
             return ioc;
         }
     }

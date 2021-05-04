@@ -13,6 +13,13 @@
         <Setter Property="FontSize" Value="Small" />
         <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
     </Style>
+    <Style
+        TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HasShadow" Value="False" />
+
+        <Setter Property="BorderColor" Value="{DynamicResource BorderFrame}" />
+    </Style>
     <Style x:Key="TitleLabel"
         TargetType="Label">
         <Setter Property="FontFamily" Value="proxima_bold" />
@@ -62,6 +69,7 @@
     <Style
         TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{DynamicResource PrimaryDark}" />
+        <Setter Property="BackgroundColor" Value="White"></Setter>
         <Setter Property="BarTextColor" Value="{DynamicResource FontInverted}" />
     </Style>
 
@@ -93,7 +101,12 @@
                 <VisualStateGroup
                     x:Name="CommonStates">
                     <VisualState
-                        x:Name="Normal" />
+                        x:Name="Normal" >
+                        <VisualState.Setters>
+                                                        <Setter Property="BackgroundColor" Value="White" />
+
+                        </VisualState.Setters>
+                    </VisualState>
                     <VisualState
                         x:Name="Selected">
                         <VisualState.Setters>

@@ -6,16 +6,14 @@
     xmlns:base="clr-namespace:GitHubApp.Page.Base"
     xmlns:customentry="clr-namespace:GitHubApp.CustomViews.CustomEntry"
     xmlns:customviews="clr-namespace:GitHubApp.CustomViews"
-    xmlns:enums="clr-namespace:GitHubApp.Model.Enums"
-    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
-    xmlns:model="clr-namespace:GitHubApp.Model"
+  xmlns:enums="clr-namespace:GitHubApp.Model.Enums"
     xmlns:pageModels="clr-namespace:GitHubApp.PageModel.Detail.Children"
     xmlns:searchfilter="clr-namespace:GitHubApp.CustomViews.SearchFilter"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit" BackgroundColor="Black"
     x:DataType="pageModels:SearchPageModel"
     x:TypeArguments="pageModels:SearchPageModel">
-    <ContentView>
-        <StackLayout>
+    <ContentView ControlTemplate="{StaticResource BusyPage}" BackgroundColor="White">
+        <StackLayout Spacing="0">
             <Grid
                 xct:StateLayout.CurrentState="{Binding CurrentState}"
                 BackgroundColor="{StaticResource PrimaryDark}"
@@ -47,15 +45,15 @@
                                     ReturnCommand="{Binding SearchEnteredCommand}"
                                     Text="{Binding SearchText}"
                                     TextColor="Black"
-                                    VerticalOptions="EndAndExpand" />
+                                    VerticalOptions="CenterAndExpand" />
                             </Grid>
 
                             <Button
                                 BackgroundColor="Transparent"
                                 Command="{Binding CancelSearchCommand}"
-                                Text="cancel"
+                                Text="cancel" Margin="10,0"
                                 TextColor="White"
-                                VerticalOptions="End" />
+                                VerticalOptions="CenterAndExpand" />
 
                         </StackLayout>
                     </xct:StateView>
@@ -83,75 +81,79 @@
                     </xct:StateView>
                 </xct:StateLayout.StateViews>
             </Grid>
-            <StackLayout
-                xct:StateLayout.CurrentState="{Binding CurrenMainState}">
-                <xct:StateLayout.StateViews>
-                    <xct:StateView
-                        Padding="20,5"
-                        StateKey="Loading">
-                        <ActivityIndicator
-                            HorizontalOptions="Center"
-                            IsRunning="True"
-                            VerticalOptions="Center"
-                            Color="{DynamicResource Accent}" />
-                    </xct:StateView>
-                    <xct:StateView
-                        StateKey="Success">
-                        <StackLayout>
-                            <xct:Expander
-                                IsExpanded="{Binding ExpandFilter}"
-                                IsVisible="{Binding HasSearchResults}"
-                                VerticalOptions="Start">
-                                <xct:Expander.Header>
-                                    <StackLayout
-                                        Margin="5"
-                                        Orientation="Horizontal">
-                                        <Label
+            <Grid RowDefinitions="*"  ColumnDefinitions="*" 
+                >
+                <StackLayout Grid.Column="0" Grid.Row="0">
+                    <StackLayout HeightRequest="100"   MinimumHeightRequest="100"  IsVisible="{Binding HasSearchResults}">
+                        <Label Margin="10"
                                             FontAttributes="Bold"
-                                            FontSize="Medium"
+                                            FontSize="Medium" VerticalOptions="CenterAndExpand"
                                             Text="{Binding SearchText, StringFormat='Search results for: {0}'}" />
-                                        <Image
-                                            HeightRequest="30"
-                                            HorizontalOptions="EndAndExpand"
-                                            Source="chevron_down"
-                                            VerticalOptions="CenterAndExpand">
-                                            <Image.Triggers>
-                                                <DataTrigger
-                                                    Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}"
-                                                    TargetType="Image"
-                                                    Value="True">
-                                                    <Setter Property="Rotation" Value="180" />
-                                                </DataTrigger>
-                                            </Image.Triggers>
-                                        </Image>
-                                    </StackLayout>
-                                </xct:Expander.Header>
-                                <searchfilter:SearchFilterView
-                                    CodeCount="{Binding CodeCount}"
-                                    IssuesCount="{Binding IssuesCount}"
-                                    RepositoriesCount="{Binding RepositoriesCount}"
-                                    SearchType="{Binding Selection}"
-                                    UsersCount="{Binding UsersCount}" />
+                        <Grid
+            Padding="5"
+            ColumnDefinitions="*,*"
+            RowDefinitions="*,*">
+                            <Frame
+                Grid.Row="0"
+                Grid.Column="0"
+                Padding="3"
+                CornerRadius="10"
+                HeightRequest="20">
+                                <Label
+                  VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding IssuesCount, StringFormat='Issues: {0}'}" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                         Command="{Binding FilterCommand}" CommandParameter="{x:Static enums:SearchTypeEnum.Issues}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame
+                Grid.Row="0"
+                Grid.Column="1"
+                Padding="3"
+                CornerRadius="10"
+                HeightRequest="20">
+                                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding RepositoriesCount, StringFormat='Repositories: {0}'}" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                         Command="{Binding FilterCommand}" CommandParameter="{x:Static enums:SearchTypeEnum.Repository}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame
+                Grid.Row="1"
+                Grid.Column="0"
+                Padding="3"
+                CornerRadius="10"
+                HeightRequest="20">
+                                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding UsersCount, StringFormat='Users: {0}'}" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                         Command="{Binding FilterCommand}" CommandParameter="{x:Static enums:SearchTypeEnum.Users}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                            <Frame
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="3"
+                CornerRadius="10"
+                HeightRequest="20">
+                                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding CodeCount, StringFormat='Code: {0}'}" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                        Command="{Binding FilterCommand}" CommandParameter="{x:Static enums:SearchTypeEnum.Code}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
 
-                                <!--<input:RadioButtonGroupView
-                                    SelectedItem="{Binding Selection}">
-                                    <input:RadioButton
-                                        Text="{Binding IssuesCount, StringFormat='Issues {0}'}"
-                                        Value="{x:Static enums:SearchTypeEnum.Issues}" />
-                                    <input:RadioButton
-                                        Text="{Binding RepositoriesCount, StringFormat='Repositories {0}'}"
-                                        Value="{x:Static enums:SearchTypeEnum.Repository}" />
-                                    <input:RadioButton
-                                        Text="{Binding UsersCount, StringFormat='Users {0}'}"
-                                        Value="{x:Static enums:SearchTypeEnum.Users}" />
-                                    <input:RadioButton
-                                        Text="{Binding CodeCount, StringFormat='Code {0}'}"
-                                        Value="{x:Static enums:SearchTypeEnum.Code}" />
-                                </input:RadioButtonGroupView>-->
-
-
-                            </xct:Expander>
-                            <CollectionView
+                        </Grid>
+                    </StackLayout>
+                    <CollectionView
                                 ItemsUpdatingScrollMode="KeepScrollOffset"
                                 ItemTemplate="{StaticResource SearchItemTemplate}"
                                 ItemsSource="{Binding SearchResultList}"
@@ -160,66 +162,62 @@
                                 SelectedItem="{Binding SelectedResult}"
                                 SelectionChangedCommand="{Binding SelectedResultCommand}"
                                 SelectionMode="Single">
-                                <CollectionView.EmptyView>
-                                    <ContentView>
-                                        <StackLayout
+                        <CollectionView.EmptyView>
+                            <ContentView>
+                                <StackLayout
                                             HorizontalOptions="CenterAndExpand"
                                             VerticalOptions="CenterAndExpand">
-                                            <Label
+                                    <Label
                                                 FontSize="Medium"
                                                 HorizontalOptions="Fill"
                                                 HorizontalTextAlignment="Center"
                                                 Text="{Binding EmptyViewText}" />
 
-                                        </StackLayout>
-                                    </ContentView>
-                                </CollectionView.EmptyView>
-                                <CollectionView.Header>
-                                    <StackLayout
+                                </StackLayout>
+                            </ContentView>
+                        </CollectionView.EmptyView>
+                        <CollectionView.Header>
+                            <StackLayout
                                         Style="{DynamicResource CollectionViewSelector}">
-                                        <Label
+                                <Label
                                             Padding="10"
                                             Text="{Binding Title}" />
-                                        <BoxView
+                                <BoxView
                                             BackgroundColor="{DynamicResource BorderFrame}"
                                             HeightRequest="1"
                                             HorizontalOptions="FillAndExpand" />
-                                    </StackLayout>
-                                </CollectionView.Header>
-                            </CollectionView>
-                        </StackLayout>
-                    </xct:StateView>
-                    <xct:StateView
-                        Padding="20,5"
-                        StateKey="Empty"
-                        VerticalOptions="CenterAndExpand">
-                        <StackLayout>
-                            <CollectionView
+                            </StackLayout>
+                        </CollectionView.Header>
+                    </CollectionView>
+                </StackLayout>
+                <StackLayout VerticalOptions="FillAndExpand"  BackgroundColor="White"
+                             IsVisible="{Binding HasHinsVisible}" Grid.Row="0"
+                             Grid.Column="0" 
+                            >
+                    <ListView VerticalOptions="FillAndExpand" Grid.Row="0"
                                 x:Name="MyCollectionView"
+                              BackgroundColor="White"
                                 ItemsSource="{Binding SearchHintList}"
+                              SelectionMode="Single"
                                 SelectedItem="{Binding SelectedHint}"
-                                SelectionMode="Single">
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackLayout
-                                            Style="{DynamicResource CollectionViewSelector}">
-                                            <Label
-                                                Margin="5"
-                                                Text="{Binding .}"
-                                                TranslationY="1" />
+                                >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell TextColor="Black"   Detail="{Binding .}" DetailColor="Black" Text="{Binding .}">
 
-                                        </StackLayout>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                            <Button
+
+                                </TextCell>
+
+
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Margin="10" VerticalOptions="End" 
                                 Command="{Binding SearchEnteredCommand}"
                                 Style="{StaticResource PrimaryButton}"
                                 Text="Search" />
-                        </StackLayout>
-                    </xct:StateView>
-                </xct:StateLayout.StateViews>
-            </StackLayout>
+                </StackLayout>
+            </Grid>
 
         </StackLayout>
     </ContentView>

@@ -59,8 +59,8 @@
                                 BackgroundColor="Transparent"
                                 BorderColor="Transparent"
                                 Command="{Binding GenerateToken}"
-                                Text="Obtain Token"
-                                TextTransform="Lowercase" />
+                                Text="Get Your Token"
+                                TextTransform="None" />
                         </StackLayout>
 
                     </Grid>

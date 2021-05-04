@@ -1,8 +1,10 @@
 ﻿using GitHubApp.PageModel.Base;
 
 using MvvmCross.Forms.Views;
-
+using System.Drawing;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace GitHubApp.Page.Base
 {
@@ -16,6 +18,8 @@ namespace GitHubApp.Page.Base
         public BaseContentPage()
         {
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+            On<iOS>().SetUseSafeArea(true);
+            BackgroundColor = Color.White;
         }
 
         /// <summary>

@@ -13,6 +13,15 @@ namespace GitHubApp.Page.Detail.Children
             InitializeComponent();
         }
 
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+            (BindingContext.DataContext as SearchPageModel).InvalidateLayout += SearchPage_InvalidateLayout;
 
+        }
+        private void SearchPage_InvalidateLayout(object sender, System.EventArgs e)
+        {
+            this.InvalidateMeasure();
+        }
     }
 }

@@ -7,17 +7,17 @@
         <Grid
             Padding="5"
             ColumnDefinitions="*,*"
-            HeightRequest="80"
             RowDefinitions="*,*">
             <Frame
                 x:Name="IssuesFrame"
                 Grid.Row="0"
                 Grid.Column="0"
-                Padding="10,3"
+                Padding="3"
                 CornerRadius="10"
-                HeightRequest="30">
+                HeightRequest="20">
                 <Label
-                    HorizontalOptions="CenterAndExpand"
+                  VerticalOptions="Center"
+                    HorizontalOptions="Center"
                     Text="{Binding IssuesCount, StringFormat='Issues: {0}'}" />
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer
@@ -28,11 +28,11 @@
                 x:Name="RepositoriesFrame"
                 Grid.Row="0"
                 Grid.Column="1"
-                Padding="10,3"
+                Padding="3"
                 CornerRadius="10"
-                HeightRequest="30">
-                <Label
-                    HorizontalOptions="CenterAndExpand"
+                HeightRequest="20">
+                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
                     Text="{Binding RepositoriesCount, StringFormat='Repositories: {0}'}" />
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer
@@ -43,11 +43,11 @@
                 x:Name="UsersFrame"
                 Grid.Row="1"
                 Grid.Column="0"
-                Padding="10,3"
+                Padding="3"
                 CornerRadius="10"
-                HeightRequest="30">
-                <Label
-                    HorizontalOptions="CenterAndExpand"
+                HeightRequest="20">
+                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
                     Text="{Binding UsersCount, StringFormat='Users: {0}'}" />
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer
@@ -58,11 +58,11 @@
                 x:Name="CodeFrame"
                 Grid.Row="1"
                 Grid.Column="1"
-                Padding="10,3"
+                Padding="3"
                 CornerRadius="10"
-                HeightRequest="30">
-                <Label
-                    HorizontalOptions="CenterAndExpand"
+                HeightRequest="20">
+                <Label VerticalOptions="Center"
+                    HorizontalOptions="Center"
                     Text="{Binding CodeCount, StringFormat='Code: {0}'}" />
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer

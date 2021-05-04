@@ -70,7 +70,6 @@ namespace GitHubApp.PageModel.ElementsPage
             if (Issue != null)
             {
                 Service.Web.ServiceStatusMessage<List<Comment>> comments = await _webService.GetIssueComments(Issue.CommentsUrl);
-                Issue.State.Value
                 if (comments.DidSucceed && comments.HasEntity)
                 {
                     Comments = comments.Entity.OrderBy(x => x.CreatedAt).ToList();

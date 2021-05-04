@@ -31,6 +31,7 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Medium"
+                                VerticalOptions="CenterAndExpand"
                                 Text="Repository content" />
                             <Image
                                 HeightRequest="30"
@@ -127,6 +128,7 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Medium"
+                                VerticalOptions="CenterAndExpand"
                                 Text="Redame" />
                             <Image
                                 HeightRequest="30"

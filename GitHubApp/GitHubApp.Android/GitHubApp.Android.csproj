@@ -16,7 +16,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -115,7 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitHubApp\GitHubApp.csproj">
-      <Project>{8FD59D81-5DA1-47BD-8779-BAAB2F94E240}</Project>
+      <Project>{FB9F894E-38E1-4A0C-B929-CE098A149A75}</Project>
       <Name>GitHubApp</Name>
     </ProjectReference>
   </ItemGroup>

@@ -36,15 +36,16 @@ namespace GitHubApp.PageModel.Detail.Children
             {
                 SearchHintList = _cacheService.GetCached<List<string>>(StorageKeys.SEARCH_CACHE);
                 CurrentState = LayoutState.Success;
-                CurrenMainState = LayoutState.Empty;
+                HasHinsVisible = true;
             });
             CancelSearchCommand = new MvxCommand(() =>
             {
                 CurrentState = LayoutState.Empty;
-                CurrenMainState = LayoutState.Success;
+                HasHinsVisible = false;
             });
             SearchEnteredCommand = new MvxAsyncCommand(SearchGithub);
             SelectedResultCommand = new MvxAsyncCommand(ShowResult);
+            FilterCommand = new MvxAsyncCommand<SearchTypeEnum>( async (param) => await ChangeDisplayedList(param));
             LoadMoreResultsCommand = new MvxAsyncCommand(LoadMoreResults);
         }
 
@@ -54,11 +55,12 @@ namespace GitHubApp.PageModel.Detail.Children
         #endregion Constructors
 
         #region Events
+        public event EventHandler InvalidateLayout;
         #endregion Events
 
         #region Fields
+        private bool _hasHinsVisible;
         private LayoutState _currentState = LayoutState.Empty;
-        private LayoutState _currenMainState = LayoutState.Success;
         private List<Issue> issueList;
         private List<SearchCode> codeList;
         private List<User> userList;
@@ -67,7 +69,7 @@ namespace GitHubApp.PageModel.Detail.Children
         private string _emptyViewText;
         private bool _hasSearchResults;
         private ObservableCollection<SearchResultContainer> _searchResultList;
-        private object _selection;
+        private SearchTypeEnum _selection;
         private string _issuesCount;
         private string _repositoriesCount;
         private string _usersCount;
@@ -90,6 +92,11 @@ namespace GitHubApp.PageModel.Detail.Children
         #endregion Services
 
         #region Properties
+        public bool HasHinsVisible
+        {
+            get => _hasHinsVisible;
+            set => SetProperty(ref _hasHinsVisible, value);
+        }
 
         public int LoadTresholdLimit
         {
@@ -149,7 +156,10 @@ namespace GitHubApp.PageModel.Detail.Children
         public bool HasSearchResults
         {
             get => _hasSearchResults;
-            set => SetProperty(ref _hasSearchResults, value);
+            set {
+
+                SetProperty(ref _hasSearchResults, value);
+            }
         }
 
         public string SelectedHint
@@ -162,7 +172,7 @@ namespace GitHubApp.PageModel.Detail.Children
             }
         }
 
-        public object Selection
+        public SearchTypeEnum Selection
         {
             get => _selection;
             set
@@ -170,7 +180,6 @@ namespace GitHubApp.PageModel.Detail.Children
                 if (value != _selection)
                 {
                     SetProperty(ref _selection, value);
-                    ChangeDisplayedList();
                 }
             }
         }
@@ -192,16 +201,14 @@ namespace GitHubApp.PageModel.Detail.Children
             get => _currentState;
             set => SetProperty(ref _currentState, value);
         }
-        public LayoutState CurrenMainState
-        {
-            get => _currenMainState;
-            set => SetProperty(ref _currenMainState, value);
-        }
+       
         #endregion Properties
 
         #region Commands
         public IMvxCommand CancelSearchCommand { get; }
         public IMvxCommand SearchCommand { get; }
+
+        public IMvxAsyncCommand<SearchTypeEnum> FilterCommand { get; }
         public IMvxAsyncCommand SearchEnteredCommand { get; }
         public IMvxAsyncCommand SelectedResultCommand { get; }
         public IMvxAsyncCommand LoadMoreResultsCommand { get; }
@@ -230,18 +237,18 @@ namespace GitHubApp.PageModel.Detail.Children
 
             return num.ToString("#,0");
         }
-        private void ChangeDisplayedList()
+        private  async Task ChangeDisplayedList( SearchTypeEnum param)
         {
-            if (Selection == null)
-            {
-                return;
-            }
+           await  BusyManager.SetBusy();
+           
             if (SearchResultList == null)
             {
                 SearchResultList = new ObservableCollection<SearchResultContainer>();
             }
             SearchResultList.Clear();
-            switch ((SearchTypeEnum)Selection)
+            if (param == SearchTypeEnum.None) return;
+            Selection = param;
+            switch (Selection)
             {
                 case SearchTypeEnum.Issues:
                     if (issueList != null && issueList.Any())
@@ -282,6 +289,8 @@ namespace GitHubApp.PageModel.Detail.Children
             {
                 LoadTresholdLimit = 10;
             }
+            await BusyManager.SetUnBusy();
+
         }
 
         private IReadOnlyList<SearchResultContainer> CreateUsersSearchResultList(IReadOnlyList<User> list)
@@ -395,7 +404,7 @@ namespace GitHubApp.PageModel.Detail.Children
         {
             if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 0)
             {
-                CurrenMainState = LayoutState.Loading;
+                await BusyManager.SetBusy();
                 issuesRequest = new SearchIssuesRequest(SearchText);
                 repositoryRequest = new SearchRepositoriesRequest(SearchText);
                 codeRequest = new SearchCodeRequest(SearchText);
@@ -413,7 +422,7 @@ namespace GitHubApp.PageModel.Detail.Children
                 if (issuesTask.Result.TotalCount != 0 || codeResultTask.Result.TotalCount != 0 || usersTask.Result.TotalCount != 0 || repositoriesTask.Result.TotalCount != 0)
                 {
                     LoadTresholdLimit = 15;
-                    ProcessResults(issuesTask, repositoriesTask, codeResultTask, usersTask);
+                    await ProcessResults(issuesTask, repositoriesTask, codeResultTask, usersTask);
                 }
                 else
                 {
@@ -421,6 +430,7 @@ namespace GitHubApp.PageModel.Detail.Children
                     EmptyViewText = "Nothing found. Try again";
                 }
             }
+            await BusyManager.SetUnBusy();
             CurrentState = LayoutState.Empty;
         }
         private async Task LoadMoreResults()
@@ -430,8 +440,7 @@ namespace GitHubApp.PageModel.Detail.Children
                 LoadTresholdLimit = -1;
             }
 
-            CurrenMainState = LayoutState.Loading;
-
+            await BusyManager.SetBusy();
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 SearchIssuesResult issues = null;
@@ -467,13 +476,15 @@ namespace GitHubApp.PageModel.Detail.Children
                 AssignLists(issues?.Items, codeResultTask?.Items, usersTask?.Items, repositoriesTask?.Items);
                 SelectedResult = null;
             }
-            CurrenMainState = LayoutState.Success;
+            await BusyManager.SetUnBusy();
+
+            HasHinsVisible = false;
 
         }
 
 
 
-        private void ProcessResults(Task<SearchIssuesResult> issuesTask, Task<SearchRepositoryResult> repositoriesTask, Task<SearchCodeResult> codeResultTask, Task<SearchUsersResult> usersTask)
+        private async Task ProcessResults(Task<SearchIssuesResult> issuesTask, Task<SearchRepositoryResult> repositoriesTask, Task<SearchCodeResult> codeResultTask, Task<SearchUsersResult> usersTask)
         {
             UpdateCacheSearchList(StorageKeys.SEARCH_CACHE, SearchText);
             ExpandFilter = true;
@@ -482,13 +493,15 @@ namespace GitHubApp.PageModel.Detail.Children
             UsersCount = FormatNumber(usersTask.Result.TotalCount);
             RepositoriesCount = FormatNumber(repositoriesTask.Result.TotalCount);
             AssignLists(issuesTask.Result.Items, codeResultTask.Result.Items, usersTask.Result.Items, repositoriesTask.Result.Items);
-            CurrenMainState = LayoutState.Success;
+            HasHinsVisible = false;
             HasSearchResults = true;
-            Selection = issuesTask.Result.TotalCount != 0 ? SearchTypeEnum.Issues
+            InvalidateLayout.Invoke(this, null);
+            var selection = issuesTask.Result.TotalCount != 0 ? SearchTypeEnum.Issues
                 : codeResultTask.Result.TotalCount != 0 ? SearchTypeEnum.Code
                 : usersTask.Result.TotalCount != 0 ? SearchTypeEnum.Users
                 : repositoriesTask.Result.TotalCount != 0 ? SearchTypeEnum.Repository
                 : SearchTypeEnum.None;
+            await ChangeDisplayedList(selection);
         }
 
         private void AssignLists(IReadOnlyList<Issue> items1, IReadOnlyList<SearchCode> items2, IReadOnlyList<User> items3, IReadOnlyList<Repository> items4)
