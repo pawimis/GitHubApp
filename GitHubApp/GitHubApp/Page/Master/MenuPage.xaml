@@ -11,7 +11,7 @@
     x:TypeArguments="pageModels:MenuPageModel">
     <ContentPage.Content>
         <ContentView
-            BackgroundColor="Tan"
+            BackgroundColor="{DynamicResource AccentSecondaryLight}"
             ControlTemplate="{StaticResource BusyPage}">
             <StackLayout
                 Padding="10,50,10,0"
@@ -33,9 +33,7 @@
 
                     </Entry.Behaviors>
                 </Entry>
-                <Button
-                    BorderColor="Black"
-                    BorderWidth="1"
+                <Button Style="{StaticResource SecondaryButton}"
                     Command="{Binding SendCommand}"
                     Text="Test your number" />
                 <Label

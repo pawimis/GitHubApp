@@ -68,7 +68,7 @@
         TargetType="ProgressBar">
         <Setter Property="ProgressColor" Value="{DynamicResource FontPrimary}" />
     </Style>
-    
+
     <Style
         TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{DynamicResource PrimaryDark}" />
@@ -96,8 +96,20 @@
         <Setter Property="FontSize" Value="12" />
         <Setter Property="CharacterSpacing" Value="0" />
         <Setter Property="HeightRequest" Value="40" />
-        <Setter Property="FontFamily" Value="canal_bold" />
         <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+        <Setter Property="TextColor" Value="{DynamicResource FontInverted}" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+    </Style>
+    <Style
+        x:Key="SecondaryButton"
+        TargetType="Button">
+        <Setter Property="CornerRadius" Value="{StaticResource ButtonCornerRadius}" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="CharacterSpacing" Value="0" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource AccentSecondary}" />
         <Setter Property="TextColor" Value="{DynamicResource FontInverted}" />
         <Setter Property="VerticalOptions" Value="CenterAndExpand" />
     </Style>
@@ -243,7 +255,8 @@
     <DataTemplate
         x:Key="CodeTemplate"
         x:DataType="model:SearchResultContainer">
-        <StackLayout  Padding="0,10"
+        <StackLayout
+            Padding="0,10"
             BackgroundColor="White">
             <BoxView
                 BackgroundColor="{DynamicResource BorderFrame}"
@@ -288,8 +301,8 @@
                 HorizontalOptions="FillAndExpand" />
             <StackLayout
                 Orientation="Horizontal">
-                <Label Margin="10,0"
-                   >
+                <Label
+                    Margin="10,0">
                     <Label.Triggers>
                         <DataTrigger
                             Binding="{Binding IsIssueClosed}"
@@ -303,7 +316,7 @@
                             Binding="{Binding IsIssueClosed}"
                             TargetType="Label"
                             Value="false">
-                           
+
                             <Setter Property="TextColor" Value="Red" />
                             <Setter Property="Text" Value="Open" />
                         </DataTrigger>
