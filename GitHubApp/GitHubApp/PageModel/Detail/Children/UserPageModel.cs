@@ -126,33 +126,41 @@ namespace GitHubApp.PageModel.Detail.Children
         }
         private async Task LoginUser()
         {
-            CurrentState = LayoutState.Loading;
-            if (ValidateInput())
+            try
             {
-                GitHubClientService.Credentials = new Credentials(Token);
-                if (RememberMe)
+                CurrentState = LayoutState.Loading;
+                if (ValidateInput())
                 {
-                    await _secureStorageService.Set(StorageKeys.USER_TOKEN, Token);
+                    GitHubClientService.Credentials = new Credentials(Token);
+                    if (RememberMe)
+                    {
+                        await _secureStorageService.Set(StorageKeys.USER_TOKEN, Token);
+                    }
+                    else
+                    {
+                        await _secureStorageService.Set(StorageKeys.USER_TOKEN, string.Empty);
+                    }
+                    User = await GitHubClientService.User.Current();
+
+                    if (User == null)
+                    {
+                        await _popupNavigationServce.PushPopup(false, string.Empty, "Incorrect username or password");
+                        CurrentState = LayoutState.Empty;
+                    }
+                    else
+                    {
+                        await GetUserData();
+                        CurrentState = LayoutState.Success;
+                    }
                 }
                 else
                 {
-                    await _secureStorageService.Set(StorageKeys.USER_TOKEN, string.Empty);
-                }
-                User = await GitHubClientService.User.Current();
-
-                if (User == null)
-                {
-                    await _popupNavigationServce.PushPopup(false, string.Empty, "Incorrect username or password");
                     CurrentState = LayoutState.Empty;
                 }
-                else
-                {
-                    await GetUserData();
-                    CurrentState = LayoutState.Success;
-                }
             }
-            else
+            catch (Exception ex)
             {
+                await _popupNavigationServce.PushSmallPopup(ex.Message, "Login error");
                 CurrentState = LayoutState.Empty;
             }
         }

@@ -7,6 +7,7 @@ namespace GitHubApp.CustomViews.CustomEntry
     {
         public BorderlessEntry()
         {
+            BackgroundColor = Color.Transparent;
         }
     }
 }

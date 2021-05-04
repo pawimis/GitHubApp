@@ -45,7 +45,7 @@ namespace GitHubApp.PageModel.Detail.Children
             });
             SearchEnteredCommand = new MvxAsyncCommand(SearchGithub);
             SelectedResultCommand = new MvxAsyncCommand(ShowResult);
-            FilterCommand = new MvxAsyncCommand<SearchTypeEnum>( async (param) => await ChangeDisplayedList(param));
+            FilterCommand = new MvxAsyncCommand<SearchTypeEnum>(async (param) => await ChangeDisplayedList(param));
             LoadMoreResultsCommand = new MvxAsyncCommand(LoadMoreResults);
         }
 
@@ -156,10 +156,7 @@ namespace GitHubApp.PageModel.Detail.Children
         public bool HasSearchResults
         {
             get => _hasSearchResults;
-            set {
-
-                SetProperty(ref _hasSearchResults, value);
-            }
+            set => SetProperty(ref _hasSearchResults, value);
         }
 
         public string SelectedHint
@@ -201,7 +198,7 @@ namespace GitHubApp.PageModel.Detail.Children
             get => _currentState;
             set => SetProperty(ref _currentState, value);
         }
-       
+
         #endregion Properties
 
         #region Commands
@@ -237,16 +234,20 @@ namespace GitHubApp.PageModel.Detail.Children
 
             return num.ToString("#,0");
         }
-        private  async Task ChangeDisplayedList( SearchTypeEnum param)
+        private async Task ChangeDisplayedList(SearchTypeEnum param)
         {
-           await  BusyManager.SetBusy();
-           
+            await BusyManager.SetBusy();
+
             if (SearchResultList == null)
             {
                 SearchResultList = new ObservableCollection<SearchResultContainer>();
             }
             SearchResultList.Clear();
-            if (param == SearchTypeEnum.None) return;
+            if (param == SearchTypeEnum.None)
+            {
+                return;
+            }
+
             Selection = param;
             switch (Selection)
             {
@@ -290,7 +291,6 @@ namespace GitHubApp.PageModel.Detail.Children
                 LoadTresholdLimit = 10;
             }
             await BusyManager.SetUnBusy();
-
         }
 
         private IReadOnlyList<SearchResultContainer> CreateUsersSearchResultList(IReadOnlyList<User> list)
@@ -341,7 +341,8 @@ namespace GitHubApp.PageModel.Detail.Children
                 Id = x.Id,
                 Title = x.HtmlUrl.Replace("https://github.com/", string.Empty),
                 Type = SearchTypeEnum.Issues,
-                Image = "exclamation",
+                Image = x.State.Value == ItemState.Closed ? "alert" : "check",
+                IsIssueClosed = x.State.Value == ItemState.Closed,
                 Discription = x.Title,
                 DateText = string.Format("{0} opened {1}  {2} comments ", x.User.Login, x.CreatedAt.Date.ToShortDateString(), x.Comments),
                 MoreInfo = string.Join(" | ", x.Labels?.Select(y => y.Name).ToArray())
@@ -352,7 +353,7 @@ namespace GitHubApp.PageModel.Detail.Children
         {
             if (SelectedResult != null)
             {
-                switch ((SearchTypeEnum)Selection)
+                switch (Selection)
                 {
 
                     case SearchTypeEnum.Issues:
@@ -402,36 +403,43 @@ namespace GitHubApp.PageModel.Detail.Children
         }
         private async Task SearchGithub()
         {
-            if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 0)
+            if (IsAuthenticated())
             {
-                await BusyManager.SetBusy();
-                issuesRequest = new SearchIssuesRequest(SearchText);
-                repositoryRequest = new SearchRepositoriesRequest(SearchText);
-                codeRequest = new SearchCodeRequest(SearchText);
-                userRequest = new SearchUsersRequest(SearchText);
+                if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 0)
+                {
+                    await BusyManager.SetBusy();
+                    issuesRequest = new SearchIssuesRequest(SearchText);
+                    repositoryRequest = new SearchRepositoriesRequest(SearchText);
+                    codeRequest = new SearchCodeRequest(SearchText);
+                    userRequest = new SearchUsersRequest(SearchText);
 
-                Task<SearchIssuesResult> issuesTask = GitHubClientService.Search.SearchIssues(issuesRequest);
-                Task<SearchRepositoryResult> repositoriesTask = GitHubClientService.Search.SearchRepo(repositoryRequest);
-                Task<SearchCodeResult> codeResultTask = GitHubClientService.Search.SearchCode(codeRequest);
-                Task<SearchUsersResult> usersTask = GitHubClientService.Search.SearchUsers(userRequest);
-                await Task.WhenAll(issuesTask, codeResultTask, repositoriesTask, usersTask);
-                issueList = null;
-                codeList = null;
-                repositoryList = null;
-                userList = null;
-                if (issuesTask.Result.TotalCount != 0 || codeResultTask.Result.TotalCount != 0 || usersTask.Result.TotalCount != 0 || repositoriesTask.Result.TotalCount != 0)
-                {
-                    LoadTresholdLimit = 15;
-                    await ProcessResults(issuesTask, repositoriesTask, codeResultTask, usersTask);
+                    Task<SearchIssuesResult> issuesTask = GitHubClientService.Search.SearchIssues(issuesRequest);
+                    Task<SearchRepositoryResult> repositoriesTask = GitHubClientService.Search.SearchRepo(repositoryRequest);
+                    Task<SearchCodeResult> codeResultTask = GitHubClientService.Search.SearchCode(codeRequest);
+                    Task<SearchUsersResult> usersTask = GitHubClientService.Search.SearchUsers(userRequest);
+                    await Task.WhenAll(issuesTask, codeResultTask, repositoriesTask, usersTask);
+                    issueList = null;
+                    codeList = null;
+                    repositoryList = null;
+                    userList = null;
+                    if (issuesTask.Result.TotalCount != 0 || codeResultTask.Result.TotalCount != 0 || usersTask.Result.TotalCount != 0 || repositoriesTask.Result.TotalCount != 0)
+                    {
+                        LoadTresholdLimit = 15;
+                        await ProcessResults(issuesTask, repositoriesTask, codeResultTask, usersTask);
+                    }
+                    else
+                    {
+                        HasSearchResults = false;
+                        EmptyViewText = "Nothing found. Try again";
+                    }
                 }
-                else
-                {
-                    HasSearchResults = false;
-                    EmptyViewText = "Nothing found. Try again";
-                }
+                await BusyManager.SetUnBusy();
+                CurrentState = LayoutState.Empty;
             }
-            await BusyManager.SetUnBusy();
-            CurrentState = LayoutState.Empty;
+            else
+            {
+                await _popupNavigationServce.PushPopup(false, "not authencticated", "In order to use app, please authenticate via oAuth Token");
+            }
         }
         private async Task LoadMoreResults()
         {
@@ -447,7 +455,7 @@ namespace GitHubApp.PageModel.Detail.Children
                 SearchRepositoryResult repositoriesTask = null;
                 SearchCodeResult codeResultTask = null;
                 SearchUsersResult usersTask = null;
-                switch ((SearchTypeEnum)Selection)
+                switch (Selection)
                 {
                     case SearchTypeEnum.Issues:
                         issuesRequest.Page++;
@@ -486,7 +494,7 @@ namespace GitHubApp.PageModel.Detail.Children
 
         private async Task ProcessResults(Task<SearchIssuesResult> issuesTask, Task<SearchRepositoryResult> repositoriesTask, Task<SearchCodeResult> codeResultTask, Task<SearchUsersResult> usersTask)
         {
-            UpdateCacheSearchList(StorageKeys.SEARCH_CACHE, SearchText);
+            UpdateCacheSearchList(StorageKeys.SEARCH_CACHE, SearchText.ToLower());
             ExpandFilter = true;
             IssuesCount = FormatNumber(issuesTask.Result.TotalCount);
             CodeCount = FormatNumber(codeResultTask.Result.TotalCount);
@@ -496,7 +504,7 @@ namespace GitHubApp.PageModel.Detail.Children
             HasHinsVisible = false;
             HasSearchResults = true;
             InvalidateLayout.Invoke(this, null);
-            var selection = issuesTask.Result.TotalCount != 0 ? SearchTypeEnum.Issues
+            SearchTypeEnum selection = issuesTask.Result.TotalCount != 0 ? SearchTypeEnum.Issues
                 : codeResultTask.Result.TotalCount != 0 ? SearchTypeEnum.Code
                 : usersTask.Result.TotalCount != 0 ? SearchTypeEnum.Users
                 : repositoriesTask.Result.TotalCount != 0 ? SearchTypeEnum.Repository

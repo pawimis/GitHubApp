@@ -1,5 +1,7 @@
 ﻿using GitHubApp.Model.Enums;
 
+using System.Windows.Input;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -31,39 +33,48 @@ namespace GitHubApp.CustomViews.SearchFilter
         public static readonly BindableProperty SearchTypeProperty = BindableProperty
           .Create(nameof(SearchType), typeof(SearchTypeEnum), typeof(SearchFilterView), SearchTypeEnum.None, BindingMode.TwoWay, propertyChanged: SearchTypeChanged);
 
+        public static readonly BindableProperty FilterCommandProperty = BindableProperty
+       .Create(nameof(FilterCommand), typeof(ICommand), typeof(SearchFilterView));
 
         public string IssuesCount { get => (string)GetValue(IssuesCountProperty); set => SetValue(IssuesCountProperty, value); }
         public string RepositoriesCount { get => (string)GetValue(RepositoriesCountProperty); set => SetValue(RepositoriesCountProperty, value); }
         public string UsersCount { get => (string)GetValue(UsersCountProperty); set => SetValue(UsersCountProperty, value); }
         public string CodeCount { get => (string)GetValue(CodeCountProperty); set => SetValue(CodeCountProperty, value); }
         public SearchTypeEnum SearchType { get => (SearchTypeEnum)GetValue(SearchTypeProperty); set => SetValue(SearchTypeProperty, value); }
-
+        public ICommand FilterCommand
+        {
+            get => (ICommand)GetValue(FilterCommandProperty);
+            set => SetValue(FilterCommandProperty, value);
+        }
         private void TapGestureRecognizer_Tapped_UsersFrame(object sender, System.EventArgs e)
         {
             ResetFrameColor();
             UsersFrame.BorderColor = AccentColor;
-            SearchType = SearchTypeEnum.Users;
+            FilterCommand?.Execute(SearchTypeEnum.Users);
         }
 
         private void TapGestureRecognizer_Tapped_IssuesFrame(object sender, System.EventArgs e)
         {
             ResetFrameColor();
             IssuesFrame.BorderColor = AccentColor;
-            SearchType = SearchTypeEnum.Issues;
+            FilterCommand?.Execute(SearchTypeEnum.Issues);
+
         }
 
         private void TapGestureRecognizer_Tapped_RepositoriesFrame(object sender, System.EventArgs e)
         {
             ResetFrameColor();
             RepositoriesFrame.BorderColor = AccentColor;
-            SearchType = SearchTypeEnum.Repository;
+            FilterCommand?.Execute(SearchTypeEnum.Repository);
+
         }
 
         private void TapGestureRecognizer_Tapped_CodeFrame(object sender, System.EventArgs e)
         {
             ResetFrameColor();
             CodeFrame.BorderColor = AccentColor;
-            SearchType = SearchTypeEnum.Code;
+            FilterCommand?.Execute(SearchTypeEnum.Code);
+
         }
 
         private void ResetFrameColor()

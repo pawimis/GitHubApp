@@ -14,5 +14,10 @@ namespace GitHubApp.Service
             return await MakeGetRequestReturnObject<List<Comment>>(url, null, null, false);
 
         }
+        public async Task<ServiceStatusMessage<IsEven>> CheckIfIsEven(string number)
+        {
+            return await MakeGetRequestReturnObject<IsEven>("https://api.isevenapi.xyz/api/", $"/iseven/{number}/", null, false);
+
+        }
     }
 }

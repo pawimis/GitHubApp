@@ -9,5 +9,6 @@ namespace GitHubApp.Interface
     public interface IGithubService
     {
         Task<ServiceStatusMessage<List<Comment>>> GetIssueComments(string url);
+        Task<ServiceStatusMessage<IsEven>> CheckIfIsEven(string number);
     }
 }

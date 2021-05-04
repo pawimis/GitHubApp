@@ -6,7 +6,7 @@
     xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms">
     <ContentView.Content>
         <StackLayout>
-            <Picker x:Name="datePicker"></Picker>
+            <Picker x:Name="datePicker" BackgroundColor="White" TextColor="Black" TitleColor="Black" Title="select year" HorizontalTextAlignment="Start"></Picker>
             <ScrollView
                 x:Name="dateScroll"
                 Margin="0"

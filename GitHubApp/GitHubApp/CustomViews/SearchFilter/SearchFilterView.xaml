@@ -14,7 +14,7 @@
                 Grid.Column="0"
                 Padding="3"
                 CornerRadius="10"
-                HeightRequest="20">
+                HeightRequest="30">
                 <Label
                   VerticalOptions="Center"
                     HorizontalOptions="Center"
@@ -30,7 +30,7 @@
                 Grid.Column="1"
                 Padding="3"
                 CornerRadius="10"
-                HeightRequest="20">
+                HeightRequest="30">
                 <Label VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Text="{Binding RepositoriesCount, StringFormat='Repositories: {0}'}" />
@@ -45,7 +45,7 @@
                 Grid.Column="0"
                 Padding="3"
                 CornerRadius="10"
-                HeightRequest="20">
+                HeightRequest="30">
                 <Label VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Text="{Binding UsersCount, StringFormat='Users: {0}'}" />
@@ -60,7 +60,7 @@
                 Grid.Column="1"
                 Padding="3"
                 CornerRadius="10"
-                HeightRequest="20">
+                HeightRequest="30">
                 <Label VerticalOptions="Center"
                     HorizontalOptions="Center"
                     Text="{Binding CodeCount, StringFormat='Code: {0}'}" />

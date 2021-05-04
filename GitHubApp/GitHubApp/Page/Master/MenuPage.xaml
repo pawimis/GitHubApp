@@ -4,15 +4,46 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:base="clr-namespace:GitHubApp.Page.Base"
+    xmlns:customentry="clr-namespace:GitHubApp.CustomViews.CustomEntry"
     xmlns:pageModels="clr-namespace:GitHubApp.PageModel.Master"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="pageModels:MenuPageModel"
     x:TypeArguments="pageModels:MenuPageModel">
     <ContentPage.Content>
-        <ContentView>
-            <StackLayout>
+        <ContentView
+            BackgroundColor="Tan"
+            ControlTemplate="{StaticResource BusyPage}">
+            <StackLayout
+                Padding="10,50,10,0"
+                VerticalOptions="StartAndExpand">
                 <Label
-                    HorizontalOptions="CenterAndExpand"
-                    Text="Welcome to Xamarin.Forms!"
-                    VerticalOptions="CenterAndExpand" />
+                    Text="Test if number is even or odd" />
+                <Entry
+                    BackgroundColor="White"
+                    Keyboard="Numeric"
+                    Placeholder="Type your number"
+                    Text="{Binding NumberText}"
+                    TextColor="Black">
+                    <Entry.Behaviors>
+
+                        <xct:NumericValidationBehavior
+                            InvalidStyle="{StaticResource InvalidEntryStyle}"
+                            MaximumValue="999999"
+                            MinimumValue="0" />
+
+                    </Entry.Behaviors>
+                </Entry>
+                <Button
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    Command="{Binding SendCommand}"
+                    Text="Test your number" />
+                <Label
+                    IsVisible="{Binding Even, Converter={StaticResource IsNotNullOrEmptyConverter}}"
+                    Text="{Binding Even, StringFormat='Is even: {0}'}" />
+                <Label
+                    Text="{Binding Ad}"
+                    TextColor="Gold" />
             </StackLayout>
         </ContentView>
     </ContentPage.Content>

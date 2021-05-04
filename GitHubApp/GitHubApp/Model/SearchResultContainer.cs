@@ -14,6 +14,7 @@ namespace GitHubApp.Model
         public string DateText { get; set; }
         public string CodeType { get; set; }
         public string Title { get; set; }
+        public bool IsIssueClosed { get; set; }
         public SearchTypeEnum Type { get; set; }
         public ImageSource Image { get; set; }
     }

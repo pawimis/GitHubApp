@@ -111,7 +111,7 @@ namespace GitHubApp.PageModel.Base
         #region Protected Methods
         protected virtual bool IsAuthenticated()
         {
-            return GitHubClientService != null && GitHubClientService.Credentials != null;
+            return GitHubClientService != null && GitHubClientService.Credentials != null && GitHubClientService.Credentials.Password != null;
         }
 
         protected virtual Task ExecuteCloseCommand()
